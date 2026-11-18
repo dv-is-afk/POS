@@ -169,7 +169,8 @@ function logout(){sessionStorage.removeItem('pos_me');me=null;cart={};authV('in'
 /* ---------- shell ---------- */
 const V={pos:vPOS,inv:vInv,sales:vSales,rc:vRc,dash:vDash,exp:vExp,emp:vEmp};
 function app(){
- const nav=[['pos','POS'],['inv','Inventory'],['sales','Sales'],['rc','Receipts'],['dash','Dashboard'],['exp','Expenses']];
+  const nav=[['pos','POS'],['sales','Sales'],['rc','Receipts'],['dash','Dashboard'],['exp','Expenses']];
+ if(me.role=='admin')nav.splice(1,0,['inv','Inventory']);
  if(me.role=='admin')nav.push(['emp','Employees']);
  $('#root').innerHTML=`<div class="app"><aside class="side">
   <div class="brand"><span class="logo">◆</span>Register</div>
@@ -180,7 +181,7 @@ function app(){
  setSync(syncState);go(tab);
 }
 function go(k){
- if(k=='emp'&&me.role!='admin')k='pos';tab=k;
+  if((k=='emp'||k=='inv')&&me.role!='admin')k='pos';tab=k;
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.k==k));
  V[k]();
 }
